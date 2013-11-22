@@ -136,6 +136,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/httpd/conf.d
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 mkdir -p %{buildroot}%{_sysconfdir}/openshift
 mkdir -p %{buildroot}%{_sysconfdir}/openshift/plugins.d
+mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
 
 cp -r . %{buildroot}%{brokerdir}
 %if %{with_systemd}
@@ -161,6 +162,7 @@ cp conf/broker.conf %{buildroot}%{_sysconfdir}/openshift/broker.conf
 cp conf/broker.conf %{buildroot}%{_sysconfdir}/openshift/broker-dev.conf
 cp conf/quickstarts.json %{buildroot}%{_sysconfdir}/openshift/quickstarts.json
 cp conf/plugins.d/README %{buildroot}%{_sysconfdir}/openshift/plugins.d/README
+cp conf/logrotate.d/%{name} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 # BZ986300
 rm -f %{buildroot}%{brokerdir}/COPYRIGHT
@@ -221,6 +223,7 @@ sed -i -e '/NON-RUNTIME BEGIN/,/NON-RUNTIME END/d' %{buildroot}%{brokerdir}/Gemf
 %{_unitdir}/openshift-broker.service
 %attr(0644,-,-) %{_unitdir}/openshift-broker.service
 %{_sysconfdir}/sysconfig/openshift-broker
+%{_sysconfdir}/logrotate.d/%{name}
 %attr(0644,-,-) %{_sysconfdir}/sysconfig/openshift-broker
 %else
 %{_initddir}/openshift-broker

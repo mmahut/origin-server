@@ -1,0 +1,17 @@
+/var/log/openshift/broker/*.log {
+ copytruncate
+ rotate 10
+ daily
+ missingok
+ notifempty
+ compress
+}
+
+/var/log/openshift/broker/http/*_log {
+ copytruncate
+ rotate 10
+ daily
+ missingok
+ notifempty
+ compress
+}
