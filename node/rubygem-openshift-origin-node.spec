@@ -2,6 +2,11 @@
     %global scl ruby193
     %global scl_prefix ruby193-
 %endif
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+    %global with_systemd 1
+%else
+    %global with_systemd 0
+%endif
 %{!?scl:%global pkg_name %{name}}
 %{?scl:%scl_package rubygem-%{gem_name}}
 %global gem_name openshift-origin-node
@@ -116,6 +121,14 @@ mkdir -p %{buildroot}/etc/openshift
 rm -rf %{buildroot}%{gem_instdir}/conf/plugins.d/README
 mv %{buildroot}%{gem_instdir}/conf/iptables.*.rules %{buildroot}%{_var}/lib/openshift/.httpd.d
 mv %{buildroot}%{gem_instdir}/conf/* %{buildroot}/etc/openshift
+
+# Install logrotate files
+mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
+%if %{with_systemd}
+install -D -p -m 644 config/logrotate.d/openshift-origin-node.logrotate.systemd %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+%else
+install -D -p -m 644 config/logrotate.d/openshift-origin-node.logrotate.service %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+%endif
 
 #move pam limit binaries to proper location
 mkdir -p %{buildroot}/usr/libexec/openshift/lib
