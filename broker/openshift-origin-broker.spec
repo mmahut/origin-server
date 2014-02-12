@@ -163,6 +163,14 @@ cp conf/broker.conf %{buildroot}%{_sysconfdir}/openshift/broker-dev.conf
 cp conf/quickstarts.json %{buildroot}%{_sysconfdir}/openshift/quickstarts.json
 cp conf/plugins.d/README %{buildroot}%{_sysconfdir}/openshift/plugins.d/README
 
+# Installing logrotate
+mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
+%if %{with_systemd}
+install -D -p -m 644 conf/openshift-origin-broker.logrotate.systemd %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+%else
+install -D -p -m 644 conf/openshift-origin-broker.logrotate.service %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+%endif
+
 # BZ986300
 rm -f %{buildroot}%{brokerdir}/COPYRIGHT
 rm -f %{buildroot}%{brokerdir}/.gitignore

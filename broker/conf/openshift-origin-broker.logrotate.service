@@ -1,0 +1,11 @@
+/var/log/openshift/broker/*.log {
+ copytruncate
+ rotate 30
+ daily
+ missingok
+ notifempty
+ compress
+ postrotate
+    /sbin/service rhc-broker reload > /dev/null 2>/dev/null || true
+ endscript
+}
